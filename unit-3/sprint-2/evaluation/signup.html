@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+
+  <body>
+    <form id="myForm">
+      <label for="Name">Name</label><br />
+      <input type="text" id="name" placeholder="Enter your name" /><br />
+      <br />
+      <label for="email">Email</label><br />
+      <input type="email" id="email" placeholder="Enter your email" /><br />
+      <br />
+      <label for="num">Number</label><br />
+      <input
+        type="number"
+        id="num"
+        placeholder="Enter your mobile number"
+      /><br />
+      <br />
+      <label for="pass">Password</label><br />
+      <input
+        type="password"
+        id="pass"
+        placeholder="Enter your password"
+      /><br />
+
+      <button id="btn">SigUp</button>
+    </form>
+  </body>
+</html>
+<script>
+  document.getElementById("btn").addEventListener("click", signup);
+
+  let user_data = JSON.parse(localStorage.getItem("information")) || [];
+
+  function signup() {
+    // e.preventDefault();
+    // console.log("here");
+
+    let user_Credentials = {
+      name: document.getElementById("name").value,
+      email: document.getElementById("email").value,
+      num: document.getElementById("num").value,
+      pass: document.getElementById("pass").value,
+    };
+    user_data.push(user_Credentials);
+
+    localStorage.setItem("information", JSON.stringify(user_data));
+    window.location.href = "login.html";
+
+    alert("Sign up successful");
+
+    // console.log(user_data);
+    // console.log(user_Credentials);
+  }
+</script>

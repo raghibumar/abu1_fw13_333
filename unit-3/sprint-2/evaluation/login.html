@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <form id="frm">
+      <label for="email">Email</label><br />
+      <input type="email" id="email" placeholder="Enter your email" /><br />
+      <br />
+      <label for="pass">Password</label><br />
+      <input
+        type="password"
+        id="pass"
+        placeholder="Enter your password"
+      /><br />
+      <br />
+      <button id="log_btn">Login</button>
+    </form>
+  </body>
+</html>
+<script>
+  document.getElementById("log_btn").addEventListener("click", login);
+  let user_arr = JSON.parse(localStorage.getItem("information")) || [];
+
+  function login() {
+    let email = document.getElementById("email").value;
+    let pass = document.getElementById("pass").value;
+
+    let count = 0;
+    for (let i = 0; i < user_arr.length; i++) {
+      if (email == user_arr[i].email && pass == user_arr[i].pass) {
+        window.location.href = "menu.html";
+        alert("Login Successful");
+        count++;
+        break;
+      }
+    }
+    if (count == 0) {
+      alert("Wrong Credentials");
+    }
+  }
+</script>

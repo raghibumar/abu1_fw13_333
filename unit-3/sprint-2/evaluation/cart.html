@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cart_page</title>
+    <style>
+      #container {
+        display: grid;
+        grid-template-columns: repeat(3, 30%);
+        grid-gap: 5%;
+        gap: 5%;
+      }
+      #totalPrice {
+        float: right;
+      }
+    </style>
+  </head>
+  <body>
+    <span><button onclick="checkout()">Checkout</button></span>
+    <div id="totalPrice"></div>
+    <div id="container"></div>
+  </body>
+</html>
+<script>
+  let containerDiv = document.getElementById("container");
+
+  let detailsOfProduct = JSON.parse(localStorage.getItem("foodList")) || [];
+  console.log(detailsOfProduct);
+
+  function showInCartPage(detailsOfProduct) {
+    //
+    containerDiv.innerHTML = "";
+    detailsOfProduct.map(function (el, index) {
+      console.log(el);
+
+      let itemsDiv = document.createElement("div");
+      itemsDiv.style.border = "1px solid red";
+
+      let img = document.createElement("img");
+      // img.src = el.strMealThumb;
+      img.src = el.img;
+      img.style.width = "100%";
+      img.style.height = "70%";
+
+      let price = document.createElement("p");
+      price.innerText = el.price;
+
+      let h2 = document.createElement("h2");
+      // h2.innerText = el.strMeal;
+      h2.innerText = el.h2;
+
+      let btn = document.createElement("button");
+      btn.innerText = "Remove item";
+      btn.addEventListener("click", function () {
+        remove(index);
+      });
+
+      itemsDiv.append(img, h2, price, btn);
+      containerDiv.append(itemsDiv);
+    });
+  }
+  showInCartPage(detailsOfProduct);
+
+  function remove(index) {
+    // console.log("hello");//just to check
+    detailsOfProduct.splice(index, 1);
+    localStorage.setItem("foodList", JSON.stringify(detailsOfProduct));
+    showInCartPage(detailsOfProduct); //ye items ko hata deta hai without refresh, agar isko nhi denge to sirf 'localStorage' se remove ho raha tha per wo item page me show ho raha tha. Lekin isko dene ke baad wo item 'localkStorage' se to remove hota hi hai aur page se bhi remove ho jata hai
+
+    window.location.reload(); //ye same hai jo function humne yaha pe call kiya hai reload ke liye
+  }
+
+  //Total price me ONLY yahi code dena hai
+  var total = detailsOfProduct.reduce(function (acc, cv) {
+    return acc + Number(cv.price);
+  }, 0);
+  document.getElementById("totalPrice").textContent = "₹ " + total;
+
+  function checkout() {
+    window.location.href = "checkout.html";
+  }
+</script>

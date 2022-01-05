@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Menu</title>
+    <style>
+      #container {
+        border: 1px solid transparent;
+        display: grid;
+        grid-template-columns: repeat(3, 30%);
+        gap: 5%;
+      }
+    </style>
+  </head>
+
+  <body>
+    <span
+      ><a href="cart.html"><button id="gotocart">Go to Cart</button></a></span
+    >
+    <div id="container"></div>
+  </body>
+</html>
+<script>
+  let container = document.getElementById("container");
+
+  let foodItems = JSON.parse(localStorage.getItem("foodList")) || [];
+
+  /* if (foodItems === null) {
+    foodItems = [];
+  } */
+
+  //getting meals data from the url
+  async function meals() {
+    try {
+      let url = `https://www.themealdb.com/api/json/v1/1/filter.php?a=American`;
+      let res = await fetch(url);
+      // console.log(res);
+      let meal_data = await res.json();
+      appendProducts(meal_data);
+      console.log(meal_data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  meals();
+
+  //displaying the meals in the web page
+  function appendProducts(elements) {
+    // console.log(elements.meals[2]);
+    elements.meals.forEach(function (ele) {
+      // console.log(ele);
+
+      let productDiv = document.createElement("div");
+
+      let img = document.createElement("img");
+      img.src = ele.strMealThumb;
+      img.style.width = "100%";
+      img.style.height = "70%";
+
+      let h2 = document.createElement("h2");
+      h2.textContent = ele.strMeal;
+
+      let price = document.createElement("p");
+      price.textContent = Math.floor(Math.random() * (500 - 100) + 100);
+
+      let btn = document.createElement("button");
+      btn.textContent = "Add to Cart";
+
+      btn.addEventListener("click", function () {
+        // counter(ele);
+        //hum 'object' isliye bana rahe hai kyon ki api me price diya hua nhi tha aur hame dono pages me price different aa rahe the
+        let obj = {
+          img: img.src,
+          h2: h2.textContent,
+          price: price.textContent,
+        };
+        counter(obj);
+      });
+
+      productDiv.append(img, h2, price, btn);
+      container.append(productDiv);
+    });
+  }
+
+  function counter(ele) {
+    console.log("ele:", ele); //jab 'add to cart' me click karenge tab ye console me dikhayega
+
+    foodItems.push(ele); //jab 'add to cart' me click karenge to wo local storage ke foodItems array me chala jayega.
+
+    localStorage.setItem("foodList", JSON.stringify(foodItems));
+  }
+  // console.log(foodItems); // local storage me kitna itms hai wo dikhayega yahan pe
+</script>
